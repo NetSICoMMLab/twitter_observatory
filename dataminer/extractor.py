@@ -36,7 +36,7 @@ class Extractor:
       files = self.restricted_to_timeline(self.ls(self.full_data_path()), start_time, end_time)
     self.create_corpus(hashtag_set, start_time, end_time, data_fullness, working_directory)
     for file in files:
-      self.extract_file(file, hashtag_set, data_fullness)
+      self.extract_file(file, hashtag_set, data_fullness, working_directory)
   
   def fullpath(self, working_directory, hashtag_set, start_time, end_time, data_fullness):
     return working_directory+"/hashtag_extractions/"+self.corpus_name(hashtag_set, start_time, end_time, data_fullness)+"/"
