@@ -42,6 +42,7 @@ class Extractor:
     return working_directory+"/hashtag_extractions/"+self.corpus_name(hashtag_set, start_time, end_time, data_fullness)+"/"
 
   def extract_file(self, file, hashtag_set, data_fullness, working_directory, start_time, end_time):
+    print "\t"+file
     if data_fullness == "reduced":
       os.popen("lz4 -dc "+self.reduced_data_path()+"/"+file+" | awk '/"+str.join("/ && /", hashtag_set)+"/' > "+self.fullpath(working_directory, hashtag_set, start_time, end_time, data_fullness)+str.replace(file, ".lz4", ".csv"))
       #todo awk does not capture totally unique hashtags but instead captures substrings of hashtags - eg. searching for #ff will also extract #ffvi #ffix and etc
