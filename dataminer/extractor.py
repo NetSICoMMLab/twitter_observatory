@@ -36,12 +36,12 @@ class Extractor:
       files = self.restricted_to_timeline(self.ls(self.full_data_path()), start_time, end_time)
     self.create_corpus(hashtag_set, start_time, end_time, data_fullness, working_directory)
     for file in files:
-      self.extract_file(file, hashtag_set, data_fullness, working_directory)
+      self.extract_file(file, hashtag_set, data_fullness, working_directory, start_time, end_time)
   
   def fullpath(self, working_directory, hashtag_set, start_time, end_time, data_fullness):
     return working_directory+"/hashtag_extractions/"+self.corpus_name(hashtag_set, start_time, end_time, data_fullness)+"/"
 
-  def extract_file(self, file, hashtag_set, data_fullness, working_directory):
+  def extract_file(self, file, hashtag_set, data_fullness, working_directory, start_time, end_time):
     if data_fullness == "reduced":
       os.popen("lz4 -dc "+self.reduced_data_path()+"/"+file+" | awk '/"+str.join("/ && /", hashtag_set)+"/' > "+self.fullpath(working_directory, hashtag_set, start_time, end_time, data_fullness)+str.replace(file, ".lz4", ".csv"))
       #todo awk does not capture totally unique hashtags but instead captures substrings of hashtags - eg. searching for #ff will also extract #ffvi #ffix and etc
