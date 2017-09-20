@@ -58,9 +58,10 @@ class Extractor:
   def restricted_to_timeline(self, files, start_time, end_time):
     ranged_files = []
     for file in files:
-      this_time = datetime.strptime(file.split(".")[-1], '%Y-%m-%d')
-      if start_time <= this_time and this_time <= end_time:
-        ranged_files.append(file)
+      if ".lz4" in file or ".xz" in file:
+        this_time = datetime.strptime(file.split(".")[-2], '%Y-%m-%d')
+        if start_time <= this_time and this_time <= end_time:
+          ranged_files.append(file)
     return ranged_files
     
   def full_data_path(self):
