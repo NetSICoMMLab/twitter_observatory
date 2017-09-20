@@ -51,7 +51,7 @@ class Extractor:
   def corpus_name(self, hashtag_set, start_time, end_time, data_fullness):
     return str.join("_", hashtag_set)+"_"+start_time.strftime("%Y-%m-%d")+"_"+end_time.strftime("%Y-%m-%d")+"_"+data_fullness
   
-  def create_corpus(self, hashtag_set, start_time, end_time, data_fullness):
+  def create_corpus(self, hashtag_set, start_time, end_time, data_fullness, working_directory):
     os.popen("mkdir -p "+working_directory+"/hashtag_extractions/"+self.corpus_name(hashtag_set, start_time, end_time, data_fullness))
     #todo also write a flat file at this point specifying wtf it is that we've requested off the servers.
   
