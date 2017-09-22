@@ -127,7 +127,8 @@ class Extractor:
             files = self.restricted_to_timeline(self.ls(self.full_data_path))
         # Make directory to place tweets
         #TODO: also write a flat file at this point specifying what is being requested/when/who requested it
-        full_corpus_path = self.make_corpus_dir(search_hashtags)
+        full_corpus_path = self.full_corpus_dir(search_hashtags)
+        os.mkdirs(full_corpus_path)
         # Search tweets in each file for matches
         for file in files:
             self.extract_file(file, search_hashtags, full_corpus_path)
@@ -154,7 +155,7 @@ class Extractor:
 
 
     # ---------------------------- Helper functions ----------------------------
-    def make_corpus_dir(self, search_hashtags):
+    def full_corpus_dir(self, search_hashtags):
         """
         Makes the directory for files of matched tweets
 
@@ -170,7 +171,6 @@ class Extractor:
         # Construct the path to the directory where tweets will be placed
         full_corpus_path = working_directory+'/'+self.corpus_dir'/'+corpus_name
         # Make the directory
-        os.mkdirs(full_corpus_path)
         return full_corpus_path
 
     def restricted_to_timeline(self, files):
