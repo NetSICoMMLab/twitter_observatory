@@ -28,7 +28,7 @@ class Term_Counter:
 
     Example:
         import term_counter
-        term_counter.Term_Counter()
+        term_counter.Term_Counter(parameters............)
 
     Parameters
     ----------
@@ -59,7 +59,7 @@ class Term_Counter:
             self.reduced_data = False
 
 
-    def get_top_terms(self, max_n=1):
+    def get_ranked_terms(self, max_n=1):
         """
         Gets the top terms (currently: hashtags, unigrams) from a set
         of tweets
@@ -82,15 +82,15 @@ class Term_Counter:
         term2count = Counter()
         hashtag2count = Counter()
         for filename in tweet_files:
-            term_counts,hashtag_counts = self.get_top_terms_from_file(filename, max_n)
+            term_counts,hashtag_counts = self.get_terms_from_file(filename, max_n)
             term2count.update(term_counts)
             hashtag2count.update(hashtag_counts)
         # Output ranked counts to files
         output_dir = self.working_dir+'/term_counts'
-        write_ranked_list(term2count, output_dir+'/'+'unigrams.csv'))
-        write_ranked_list(hashtag2count, output_dir+'/'+'hashtags.csv')
+        self.write_ranked_list(term2count, output_dir+'/'+'unigrams.csv'))
+        self.write_ranked_list(hashtag2count, output_dir+'/'+'hashtags.csv')
 
-    def get_top_terms_from_file(self, filename, max_n):
+    def get_terms_from_file(self, filename, max_n):
         """
         Extracts counts of terms and hashtags for all tweets in a tweet file.
         File currently extracts unigrams, as preprocessed by clean_tweet()
@@ -107,7 +107,9 @@ class Term_Counter:
         term2count = Counter()
         hashtag2count = Counter()
         # Get hashtags and raw tweet text
-        with open(tweet_dir+'/'+filename, 'rb') as f:
+        # this is kinda weird, you pass the filename to this func but assume where it is under tweet dir...
+        # wrap the first part as a function (for use with get_full_text()) using f.open() and f.close() instead?
+        with open(self.tweet_dir+'/'+filename, 'rb') as f:
             # Open the file differently based on CSV or JSON
             if self.reduced_data is True:
                 # TODO: what is the proper delimiter?
@@ -130,17 +132,22 @@ class Term_Counter:
                 # Update Counters
                 term2count.update(clean_text)
                 hashtag2count.update(hashtags)
-
         return (term2count, hashtag2count)
 
-
-
-
-    def get_full_text(self, search_terms):
+    def get_full_text(self, search_term):
         """
-
+        Gets the full text of all tweets containing a given search term
         """
+        # List out tweet files
+        tweet_files = os.listdir(self.tweet_dir)
+        for filename in tweet_files:
+            # parts of get_terms_from_file() should be wrapped into a function for
+            # use with this function and get_full_text_from_file()
 
+    def get_full_text_from_file(self, search_term):
+        """
+        Helper function to get_full_text()
+        """
 
     # --------------------------------------------------------------------------
     # ---------------------------- Helper functions ----------------------------
@@ -155,6 +162,8 @@ class Term_Counter:
         2. Do basic filtering of 'rt' and URLs from tweet (not extensive)
         3. Remove stop words from tweet (NLTK stop word list)
         4. Remove punctuation from tweet, except hashtag (#) symbol
+
+        TODO: this func doesn't play well with wanting to get n-grams or phrases
 
         OUTPUT
         ------
@@ -180,8 +189,10 @@ class Term_Counter:
         Expects a dict where values are counts
         Writes file (CSV file) of terms, counts, and rank
         """
+        # Dict -> sorted list of (value, key) pairs in high->low order
         values_keys = [(key2value, key) for key in key2value.keys()]
         value_keys.sort(reverse = True)
+        # Write ranks, keys, and values, to file
         with open(filename, 'w') as f:
             csvwriter = csv.writer(f, delimiter='')
             for k,(value,key) in enumerate(value_keys):
