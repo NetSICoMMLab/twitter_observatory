@@ -71,7 +71,7 @@ class Extractor:
     def __init__(self,hashtag_set, hashtag_operator='OR', start_time='2011-07-01',
                  end_time='2016-12-01', data_fullness='reduced',
                  corpus_dir='hashtag_extractions', working_directory=None):
-        # TODO: more integrity checks of passed paramters
+        # TODO: more integrity checks of passed paramters (all wrapped in funcs)
         # Initialize parameters of search
         self.hashtag_set = hashtag_set
         self.start_time = start_time
@@ -81,9 +81,10 @@ class Extractor:
         self.current_user = os.popen('whoami').read().split('\n')[0]
         self.full_data_path = '/net/twitter/gardenhose-data/json'
         self.reduced_data_path = '/net/twitter/gardenhose-data/summarized'
-        if working_directory == None:
+        if working_directory is None:
             self.working_directory="/home/"+self.current_user()
         # Validate start and end date
+        # TODO: wrap in function
         try:
             self.start_datetime = datetime.strptime(start_time, '%Y-%m-%d')
             self.end_datetime = datetime.strptime(end_time, '%Y-%m-%d')
@@ -151,10 +152,12 @@ class Extractor:
         if self.data_fullness == 'reduced':
             os.popen("lz4 -dc "+self.reduced_data_path+"/"+file+" | awk '/"+str.join("/ && /", search_hashtags)+"/' > "+full_corpus_path+str.replace(file, ".lz4", ".csv"))
         elif self.data_fullness == 'full':
-            os.popen("xzcat "+self.full_data_path+"/"+file+" | awk '/"+str.join("/ && /", search_hashtags)+"/' > "+full_corpus_path+str.replace(file, ".xz", ".csv"))
+            os.popen("xzcat "+self.full_data_path+"/"+file+" | awk '/"+str.join("/ && /", search_hashtags)+"/' > "+full_corpus_path+str.replace(file, ".xz", ".json"))
 
 
+    # --------------------------------------------------------------------------
     # ---------------------------- Helper functions ----------------------------
+    # --------------------------------------------------------------------------
     def full_corpus_dir(self, search_hashtags):
         """
         Makes the directory for files of matched tweets
