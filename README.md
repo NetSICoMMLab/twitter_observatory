@@ -1,12 +1,14 @@
 # CoMM Lab Tweet Dataminer
 A suite of scripts to automate collection and analysis of tweets from the Twitter Gardenhose at Northeastern University. Currently, a user can specify a keyword or hashtag. More complex queries are left for future work.
 
-**Contributors:** Devin Gaffney, Ryan J. Gallagher
+**Contributors:** Devin Gaffney & Ryan J. Gallagher, Northeastern University, 2017
+
 
 ## extractor.py
-Searches the Gardenhose (either the full JSON files or summarized CSV files) based on a keyword or set of keywords and outputs matches for later analysis. The extractor supports "AND" queries (search looks for *all* hashtags to appear in each tweet) or "OR" queries (search looks individually for each hashtag in tweets).
-
-Sample call:
+Extracts tweets from the Gardenhose (either from the full JSON files or
+summarized CSV files) based on a keyword or set of keywords and outputs matched
+tweets for later analysis. User can search for several keywords/hashtags
+individually or search for tweets containing *all* of the specified keywords.
 
 ## term_counter.py
 TODO:
