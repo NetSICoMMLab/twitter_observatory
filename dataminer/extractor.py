@@ -105,7 +105,8 @@ class Extractor:
                 print "Extracting "+hashtag
             self.extract([hashtag])
         else:
-            return "Hashtag Operator MUST BE AND or OR, you goof."
+            print('Hashtag operator must be "AND" or "OR"')
+            sys.exit()
 
     def extract(self, search_hashtags):
         """
