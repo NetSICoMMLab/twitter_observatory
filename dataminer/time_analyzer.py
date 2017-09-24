@@ -1,23 +1,23 @@
-"""Network Analyzer (network_analyzer.py)
-Takes a directory of tweets, builds a network, and returns relevant statistics
-about the network
+"""Term Analyzer (time_anlayzer.py)
+Takes a directory of tweets and returns count time series of those tweets at
+various temporal scales
 
 Contributors:
 Devin Gaffney & Ryan J. Gallagher
 Network Science Institute, Northeastern University, 2017
 """
+
 import os
 import csv
 import json
-import networkx as nx
 
-class Network_Analyzer:
+class Time_Analyzer:
     """
-    Builds networks for returning network statistics and data
+    Count the number of tweets for time series at various temporal scales
 
     Example:
-        import network_analyzer
-        network_analyzer.Network_Analyzer(parameters............)
+        import time_analyzer
+        time_analyzer.Time_Analyzer(parameters............)
 
     Parameters
     ----------
