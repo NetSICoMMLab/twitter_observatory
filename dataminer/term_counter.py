@@ -193,6 +193,7 @@ class Term_Counter:
         values_keys = [(key2value, key) for key in key2value.keys()]
         value_keys.sort(reverse = True)
         # Write ranks, keys, and values, to file
+        #TODO: need to check file exists first I think?
         with open(filename, 'w') as f:
             csvwriter = csv.writer(f, delimiter='')
             for k,(value,key) in enumerate(value_keys):
