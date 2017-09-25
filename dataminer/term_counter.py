@@ -21,7 +21,7 @@ exclude = set(punctuation)
 exclude.remove('#')
 from nltk.tokenize import TweetTokenizer
 tknzr = TweetTokenizer(preserve_case=False,strip_handles=True,reduce_len=False)
-
+import codecs
 
 class TermCounter:
     """
@@ -47,13 +47,13 @@ class TermCounter:
         with the full JSON data.
     """
 
-    def __init__(tweet_dir, working_dir=None):
+    def __init__(self, tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
         self.got_top_terms = False
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
-            self.working_dir = working_Dir
+            self.working_dir = working_dir
         if 'reduced' in self.tweet_dir:
             self.reduced_data = True
         else:
@@ -79,12 +79,16 @@ class TermCounter:
         # Get hashtags and unigram counts from each file
         final_counts = {'terms': Counter(), 'hashtags': Counter(), 'mentions': Counter(), 'urls': Counter()}
         for filename in tweet_files:
+            print filename
             file_counts = self.get_terms_from_file(filename, max_n)
             for key in file_counts.keys():
                 final_counts[key].update(file_counts[key])
         # Output ranked counts to files
         output_dir = self.working_dir+'/term_counts'
-        os.mkdir(output_dir)
+        try:
+            os.makedirs(output_dir)
+        except:
+            print "File '"+output_dir+"' exists"
         for key in final_counts.keys():
             self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
 
@@ -104,33 +108,85 @@ class TermCounter:
         """
         term2count = Counter()
         hashtag2count = Counter()
-        mentiong2count = Counter()
+        mention2count = Counter()
         url2count = Counter()
+        null_rows = 0
         # Get hashtags and raw tweet text
         # this is kinda weird, you pass the filename to this func but assume where it is under tweet dir...
         # wrap the first part as a function (for use with get_full_text()) using f.open() and f.close() instead?
         with open(self.tweet_dir+'/'+filename, 'rb') as f:
             # Open the file differently based on CSV or JSON
             if self.reduced_data is True:
-                tweet_file = csv.reader(f, delimiter='\t')
+                tweet_file = self.a_most_dirty_hand(csv.reader(f, delimiter='\t'))
             else:
                 tweet_file = f
             # Read through each line of the file and update Counters
             for tweet in tweet_file:
-                if self.reduced_data is True:
-                    text = tweet[9]
-                else:
-                    tweet = json.loads(line)
-                    text = tweet['text']
-                # Clean tweet text
-                clean_text = clean_tweet(text)
-                term2count.update(clean_text)
-                # Update Counters
-                hashtag2count.update(self.hashtags(text))
-                mention2count.update(self.mentions(text))
-                url2count.update(self.urls(text))
+                try:
+                    if self.reduced_data is True:
+                        text = unicode(tweet[9], 'utf-8')
+                    else:
+                        tweet = json.loads(line)
+                        text = unicode(tweet['text'], 'utf-8')
+                    # Clean tweet text
+                    clean_text = self.clean_tweet(text)
+                    term2count.update(clean_text)
+                    # Update Counters
+                    hashtag2count.update(self.hashtags(text))
+                    mention2count.update(self.mentions(text))
+                    url2count.update(self.urls(text))
+                except:
+                    print "Null row."
+                    null_rows += 1
+        print str(null_rows)+" null rows encountered"
         return {'terms': term2count, 'hashtags': hashtag2count, 'mentions': mention2count, 'urls': url2count}
 
+    def tweets_matching_tokens(self, top_count=20, types=["hashtags"]):
+        if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set(os.listdir(self.working_dir))) == len(types):
+            term_counts = Counter()
+            for key in types:
+                with open(self.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        if row[0] not in term_counts.keys():
+                            term_counts[row[0]] = int(row[1])
+                        else:
+                            term_counts[row[0]] += int(row[1])
+            top_terms = [el[0] for el in term_counts.most_common(top_count)]
+            os.makedirs(output_dir)
+            for key in final_counts.keys():
+                self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
+            tweet_files = os.listdir(self.tweet_dir)
+            # Get hashtags and unigram counts from each file
+            corpus = []
+            for filename in tweet_files:
+                with open(self.tweet_dir+'/'+filename, 'rb') as f:
+                    # Open the file differently based on CSV or JSON
+                    if self.reduced_data is True:
+                        tweet_file = csv.reader(f, delimiter='\t')
+                    else:
+                        tweet_file = f
+                    # Read through each line of the file and update Counters
+                    for tweet in tweet_file:
+                        if self.reduced_data is True:
+                            text = unicode(tweet[9], 'utf-8')
+                        else:
+                            tweet = json.loads(line)
+                            text = unicode(tweet['text'], 'utf-8')
+                        for term in top_terms:
+                            if str.lower(term) in str.lower(text):
+                                corpus.append(tweet)
+            output_dir = self.working_dir+'/top_term_tweets'
+            try:
+                os.makedirs(output_dir)
+            except:
+                print "File '"+output_dir+"' exists"
+            with open(output_dir+"/top_term_tweets.csv", 'a') as f:
+                csvwriter = csv.writer(f, delimiter=',')
+                csvwriter.writerows(corpus)
+        else:
+            print "Cannot run this until you've run get_ranked_terms to generate term counts!!"
+    
     # def get_full_text(self, search_term):
     #     """
     #     Gets the full text of all tweets containing a given search term
@@ -181,29 +237,39 @@ class TermCounter:
         cleaned_text = text_noPunct.strip().split()
         return cleaned_text
 
-    def parser(self, text):
-        ttp.Parser().parse(self, text)
+    def parse(self, text):
+        return ttp.Parser().parse(text)
     
     def hashtags(self, text):
-        parser(self, text).tags
+        return self.parse(text).tags
 
     def mentions(self, text):
-        parser(self, text).users
+        return self.parse(text).users
 
     def urls(self, text):
-        parser(self, text).urls
+        return self.parse(text).urls
 
-    def write_ranked_list(key2value, filename):
+    def write_ranked_list(self, key2value, filename):
         """
         Expects a dict where values are counts
         Writes file (CSV file) of terms, counts, and rank
         """
         # Dict -> sorted list of (value, key) pairs in high->low order
         values_keys = [(key2value, key) for key in key2value.keys()]
-        value_keys.sort(reverse = True)
+        values_keys.sort(reverse = True)
         # Write ranks, keys, and values, to file
         #TODO: need to check file exists first I think?
-        with open(filename, 'w') as f:
+        with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter='')
             for k,(value,key) in enumerate(value_keys):
                 csvwriter.writerow([k,key,value])
+    
+    def a_most_dirty_hand(self, csv_reader): 
+        while True: 
+            try: 
+                yield next(csv_reader) 
+            except csv.Error: 
+                # error handling what you want.
+                pass
+            continue 
+        return
