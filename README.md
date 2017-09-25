@@ -33,3 +33,20 @@ TODO:
 # learner
 TODO:
 - Suite of classifiers to try and infer gender, race, etc for later qualitative analysis
+
+
+##installation instructions
+pip install nltk
+pip install twitter-text-python
+python && `nltk.download("stopwords")`
+
+##example code
+```python
+from extractor import Extractor
+gg = Extractor(["#AltonSterling"], "OR", "2014-02-01", "2016-02-01")
+
+import term_counter
+tc = term_counter.TermCounter("/home/dgaffney/hashtag_extractions/#AltonSterling_2015-08-09_2017-08-09_reduced", "/home/dgaffney/hashtag_results/#AltonSterling_2015-08-09_2017-08-09_reduced")
+tc.get_ranked_terms()
+tc.tweets_matching_tokens()
+```
