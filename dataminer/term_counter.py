@@ -14,6 +14,7 @@ from datetime import datetime
 from collections import Counter
 
 from nltk.corpus import stopwords
+from ttp import ttp
 stop_words = stopwords.words('english')
 from string import punctuation
 exclude = set(punctuation)
@@ -22,13 +23,13 @@ from nltk.tokenize import TweetTokenizer
 tknzr = TweetTokenizer(preserve_case=False,strip_handles=True,reduce_len=False)
 
 
-class Term_Counter:
+class TermCounter:
     """
     Count top terms (hashtags, unigrams, n-grams, phrases) for a set of tweets
 
     Example:
         import term_counter
-        term_counter.Term_Counter(parameters............)
+        term_counter.TermCounter(parameters............)
 
     Parameters
     ----------
@@ -113,20 +114,18 @@ class Term_Counter:
             # Open the file differently based on CSV or JSON
             if self.reduced_data is True:
                 # TODO: what is the proper delimiter?
-                tweet_file = csv.reader(f, delimiter=',')
+                tweet_file = csv.reader(f, delimiter='\t')
             else:
                 tweet_file = f
             # Read through each line of the file and update Counters
             for tweet in tweet_file:
                 if self.reduced_data is True:
-                    #TODO: figure out proper indices of row
-                    text = tweet[]
-                    hashtags = tweet[]
+                    text = tweet[9]
+                    hashtags = hashtags(text)
                 else:
                     tweet = json.loads(line)
-                    #TODO: figure out proper keys of dict
                     text = tweet['text']
-                    hashtags = tweet[][]
+                    hashtags = hashtags(text)
                 # Clean tweet text
                 clean_text = clean_tweet(text)
                 # Update Counters
@@ -183,6 +182,18 @@ class Term_Counter:
         # Split back to list of words
         cleaned_text = text_noPunct.strip().split()
         return cleaned_text
+
+    def parser(self, text):
+        ttp.Parser().parse(self, text)
+    
+    def hashtags(self, text):
+        parser(self, text).tags
+
+    def users(self, text):
+        parser(self, text).users
+
+    def urls(self, text):
+        parser(self, text).urls
 
     def write_ranked_list(key2value, filename):
         """
