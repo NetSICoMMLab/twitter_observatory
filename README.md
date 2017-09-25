@@ -12,8 +12,6 @@ individually or search for tweets containing *all* of the specified keywords.
 
 ## term_counter.py
 TODO:
-- Counts the hashtags appearing in the tweets
-- Returns full text of tweets for tweets containing the top *n* hashtags
 - Counts the n-grams appearing in the tweets
 - Builds a doc-term matrix?
 - Sentiment analysis? (probably should be in different script around NLP tasks)
