@@ -74,22 +74,19 @@ class TermCounter:
         ------
         Makes separate files containing ranked lists of terms
         """
-        #TODO: extend to n-grams and phrases. Need to be more careful about
-        #      clean_tweet() if you do this
-
         # List out tweet files
         tweet_files = os.listdir(self.tweet_dir)
         # Get hashtags and unigram counts from each file
-        term2count = Counter()
-        hashtag2count = Counter()
+        final_counts = {'terms': Counter(), 'hashtags': Counter(), 'mentions': Counter(), 'urls': Counter()}
         for filename in tweet_files:
-            term_counts,hashtag_counts = self.get_terms_from_file(filename, max_n)
-            term2count.update(term_counts)
-            hashtag2count.update(hashtag_counts)
+            file_counts = self.get_terms_from_file(filename, max_n)
+            for key in file_counts.keys():
+                final_counts[key].update(file_counts[key])
         # Output ranked counts to files
         output_dir = self.working_dir+'/term_counts'
-        self.write_ranked_list(term2count, output_dir+'/'+'unigrams.csv'))
-        self.write_ranked_list(hashtag2count, output_dir+'/'+'hashtags.csv')
+        os.mkdir(output_dir)
+        for key in final_counts.keys():
+            self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
 
     def get_terms_from_file(self, filename, max_n):
         """
@@ -107,13 +104,14 @@ class TermCounter:
         """
         term2count = Counter()
         hashtag2count = Counter()
+        mentiong2count = Counter()
+        url2count = Counter()
         # Get hashtags and raw tweet text
         # this is kinda weird, you pass the filename to this func but assume where it is under tweet dir...
         # wrap the first part as a function (for use with get_full_text()) using f.open() and f.close() instead?
         with open(self.tweet_dir+'/'+filename, 'rb') as f:
             # Open the file differently based on CSV or JSON
             if self.reduced_data is True:
-                # TODO: what is the proper delimiter?
                 tweet_file = csv.reader(f, delimiter='\t')
             else:
                 tweet_file = f
@@ -121,32 +119,32 @@ class TermCounter:
             for tweet in tweet_file:
                 if self.reduced_data is True:
                     text = tweet[9]
-                    hashtags = hashtags(text)
                 else:
                     tweet = json.loads(line)
                     text = tweet['text']
-                    hashtags = hashtags(text)
                 # Clean tweet text
                 clean_text = clean_tweet(text)
-                # Update Counters
                 term2count.update(clean_text)
-                hashtag2count.update(hashtags)
-        return (term2count, hashtag2count)
+                # Update Counters
+                hashtag2count.update(self.hashtags(text))
+                mention2count.update(self.mentions(text))
+                url2count.update(self.urls(text))
+        return {'terms': term2count, 'hashtags': hashtag2count, 'mentions': mention2count, 'urls': url2count}
 
-    def get_full_text(self, search_term):
-        """
-        Gets the full text of all tweets containing a given search term
-        """
-        # List out tweet files
-        tweet_files = os.listdir(self.tweet_dir)
-        for filename in tweet_files:
-            # parts of get_terms_from_file() should be wrapped into a function for
-            # use with this function and get_full_text_from_file()
-
-    def get_full_text_from_file(self, search_term):
-        """
-        Helper function to get_full_text()
-        """
+    # def get_full_text(self, search_term):
+    #     """
+    #     Gets the full text of all tweets containing a given search term
+    #     """
+    #     # List out tweet files
+    #     tweet_files = os.listdir(self.tweet_dir)
+    #     for filename in tweet_files:
+    #         # parts of get_terms_from_file() should be wrapped into a function for
+    #         # use with this function and get_full_text_from_file()
+    
+    # def get_full_text_from_file(self, search_term):
+    #     """
+    #     Helper function to get_full_text()
+    #     """
 
     # --------------------------------------------------------------------------
     # ---------------------------- Helper functions ----------------------------
@@ -189,7 +187,7 @@ class TermCounter:
     def hashtags(self, text):
         parser(self, text).tags
 
-    def users(self, text):
+    def mentions(self, text):
         parser(self, text).users
 
     def urls(self, text):
