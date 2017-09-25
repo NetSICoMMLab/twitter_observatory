@@ -261,7 +261,7 @@ class TermCounter:
         #TODO: need to check file exists first I think?
         with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter=',')
-            for k,(value,key) in enumerate(value_keys):
+            for k,(value,key) in enumerate(values_keys):
                 csvwriter.writerow([k,key,value])
     
     def a_most_dirty_hand(self, csv_reader): 
