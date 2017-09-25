@@ -260,7 +260,7 @@ class TermCounter:
         # Write ranks, keys, and values, to file
         #TODO: need to check file exists first I think?
         with open(filename, 'a') as f:
-            csvwriter = csv.writer(f, delimiter='')
+            csvwriter = csv.writer(f, delimiter=',')
             for k,(value,key) in enumerate(value_keys):
                 csvwriter.writerow([k,key,value])
     
