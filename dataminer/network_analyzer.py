@@ -96,7 +96,7 @@ class NetworkAnalyzer:
                     tweet = json.loads(line)
                     user = 5#TODO: fill in
                     text = unicode(tweet['text'], 'utf-8')
-                mentions = self.mentions(text)
+                mentions = term_counter.TermCounter("", "").mentions(text)
                 # Make edges of user with all mentions
                 for mention in mentions:
                     edge2weight.update((user, mention))
@@ -163,9 +163,6 @@ class NetworkAnalyzer:
             csvwriter = csv.writer(f, delimiter=',')
             for (weight,edge) in weight_edges:
                 csvwriter.writerow([edge[0],edge[1],weight])
-
-    def mentions(self, text):
-        return self.parse(text).users
 
     def a_most_dirty_hand(self, csv_reader):
         while True:
