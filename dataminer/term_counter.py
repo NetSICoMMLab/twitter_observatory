@@ -141,7 +141,7 @@ class TermCounter:
         print str(null_rows)+" null rows encountered"
         return {'terms': term2count, 'hashtags': hashtag2count, 'mentions': mention2count, 'urls': url2count}
 
-    def tweets_matching_tokens(self, top_count=20, types=["hashtags"]):
+    def tweets_matching_tokens(self, top_count=20, types=["hashtags"], include_user_if_user_mentions=False):
         if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set([el.replace(".csv", "") for el in os.listdir(self.working_dir+"/term_counts")])) == len(types):
             term_counts = Counter()
             for key in types:
@@ -169,11 +169,13 @@ class TermCounter:
                         try:
                             if self.reduced_data is True:
                                 text = unicode(tweet[9], 'utf-8')
+                                screen_name = tweet[-1]
                             else:
                                 tweet = json.loads(line)
                                 text = unicode(tweet['text'], 'utf-8')
+                                screen_name = tweet['screen_name']
                             for term in top_terms:
-                                if term in text:
+                                if term in text or (include_user_if_user_mentions == True and term == tweet[-1]):
                                     corpus.append(tweet)
                         except:
                             print "Null row."
@@ -183,7 +185,11 @@ class TermCounter:
                 os.makedirs(output_dir)
             except:
                 print "File '"+output_dir+"' exists"
-            with open(output_dir+"/top_term_tweets.csv", 'a') as f:
+            if include_user_if_user_mentions == True:
+                filename = output_dir+"/top_mentioned_users_timeline.csv"
+            else:
+                filename = output_dir+"/top_term_tweets.csv"
+            with open(, 'a') as f:
                 csvwriter = csv.writer(f, delimiter=',')
                 csvwriter.writerows(corpus)
         else:
