@@ -89,10 +89,7 @@ class TermCounter:
         except:
             print "File '"+output_dir+"' exists"
         for key in final_counts.keys():
-            if key == "hashtags":
-                return [final_counts[key], output_dir+'/'+key+'.csv']
-            else:
-                self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
+            self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
 
     def get_terms_from_file(self, filename, max_n):
         """
