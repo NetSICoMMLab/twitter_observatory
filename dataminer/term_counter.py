@@ -166,14 +166,18 @@ class TermCounter:
                         tweet_file = f
                     # Read through each line of the file and update Counters
                     for tweet in tweet_file:
-                        if self.reduced_data is True:
-                            text = unicode(tweet[9], 'utf-8')
-                        else:
-                            tweet = json.loads(line)
-                            text = unicode(tweet['text'], 'utf-8')
-                        for term in top_terms:
-                            if term in text:
-                                corpus.append(tweet)
+                        try:
+                            if self.reduced_data is True:
+                                text = unicode(tweet[9], 'utf-8')
+                            else:
+                                tweet = json.loads(line)
+                                text = unicode(tweet['text'], 'utf-8')
+                            for term in top_terms:
+                                if term in text:
+                                    corpus.append(tweet)
+                        except:
+                            print "Null row."
+                            null_rows += 1
             output_dir = self.working_dir+'/top_term_tweets'
             try:
                 os.makedirs(output_dir)
