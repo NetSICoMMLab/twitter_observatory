@@ -189,7 +189,7 @@ class TermCounter:
                 filename = output_dir+"/top_mentioned_users_timeline.csv"
             else:
                 filename = output_dir+"/top_term_tweets.csv"
-            with open(, 'a') as f:
+            with open(filename, 'a') as f:
                 csvwriter = csv.writer(f, delimiter=',')
                 csvwriter.writerows(corpus)
         else:

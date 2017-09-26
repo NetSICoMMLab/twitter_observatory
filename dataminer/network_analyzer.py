@@ -9,6 +9,7 @@ Network Science Institute, Northeastern University, 2017
 import os
 import csv
 import json
+import term_counter
 from ttp import ttp
 #import networkx as nx
 from collections import Counter
