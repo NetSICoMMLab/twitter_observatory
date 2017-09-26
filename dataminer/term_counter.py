@@ -154,9 +154,6 @@ class TermCounter:
                         else:
                             term_counts[row[1]] += int(row[2])
             top_terms = [el[0] for el in term_counts.most_common(top_count)]
-            os.makedirs(output_dir)
-            for key in final_counts.keys():
-                self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
             tweet_files = os.listdir(self.tweet_dir)
             # Search through tweet files
             corpus = []
