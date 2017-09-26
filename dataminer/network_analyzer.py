@@ -87,21 +87,21 @@ class NetworkAnalyzer:
             # Read through each line of the file and update Counters
             null_rows = 0
             for tweet in tweet_file:
-                try:
-                    if self.reduced_data is True:
-                        user = tweet[-1]
-                        text = unicode(tweet[9], 'utf-8')
-                    else:
-                        tweet = json.loads(line)
-                        user = 5#TODO: fill in
-                        text = unicode(tweet['text'], 'utf-8')
-                    mentions = self.mentions(text)
-                    # Make edges of user with all mentions
-                    for mention in mentions:
-                        edge2weight.update((user, mention))
-                except:
-                    print "Null row."
-                    null_rows += 1
+                # try:
+                if self.reduced_data is True:
+                    user = tweet[-1]
+                    text = unicode(tweet[9], 'utf-8')
+                else:
+                    tweet = json.loads(line)
+                    user = 5#TODO: fill in
+                    text = unicode(tweet['text'], 'utf-8')
+                mentions = self.mentions(text)
+                # Make edges of user with all mentions
+                for mention in mentions:
+                    edge2weight.update((user, mention))
+                # except:
+                #     print "Null row."
+                #     null_rows += 1
         return edge2weight
 
     def get_network_size(self):
