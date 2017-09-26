@@ -88,11 +88,11 @@ class NetworkAnalyzer:
             for tweet in tweet_file:
                 try:
                     if self.reduced_data is True:
-                        user = #TODO: fill in
+                        user = tweet[-1]
                         text = unicode(tweet[9], 'utf-8')
                     else:
                         tweet = json.loads(line)
-                        user = #TODO: fill in
+                        user = 5#TODO: fill in
                         text = unicode(tweet['text'], 'utf-8')
                     mentions = self.mentions(text)
                     # Make edges of user with all mentions
