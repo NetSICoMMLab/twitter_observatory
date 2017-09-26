@@ -19,7 +19,7 @@ class NetworkAnalyzer:
 
     Example:
         import network_analyzer
-        network_analyzer.Network_Analyzer(parameters............)
+        network_analyzer.NetworkAnalyzer(parameters............)
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ class NetworkAnalyzer:
     edge2weight, dict (source/target tuple -> weight)
     """
 
-    def __init__(tweet_dir, working_dir=None):
+    def __init__(self, tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
         self.n_nodes = 0
         self.n_edges = 0
