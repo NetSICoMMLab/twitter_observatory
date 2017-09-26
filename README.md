@@ -11,7 +11,7 @@ tweets for later analysis. User can search for several keywords/hashtags
 individually or search for tweets containing *all* of the specified keywords.
 
 ## term_counter.py
-TODO:
+TODO: (extra)
 - Counts the n-grams appearing in the tweets
 - Builds a doc-term matrix?
 - Sentiment analysis? (probably should be in different script around NLP tasks)
@@ -22,9 +22,11 @@ TODO:
 
 ## network.py
 TODO:
-- Makes a edge lists based on Twitter interactions (user-specified AND/OR: retweets, mentions, quote-retweets)
-- Counts number of nodes and edges
-- Creates the in-degree distribution (more broadly, ranks users by any network metric) and returns the full text of tweets by or mentioning the top n users in this distribution
+- Return the full text of tweets by or mentioning the top n users in this distribution (can we use term_counter for this?)
+
+TODO: (extra)
+- Let user specify what interactions they want (retweet, quote retweet, mention, reply)
+- Rank users by any network measure
 - Centrality?
 - Mesoscale structures?
 
@@ -33,12 +35,13 @@ TODO:
 - Suite of classifiers to try and infer gender, race, etc for later qualitative analysis
 
 
-##installation instructions
+## installation instructions
 pip install nltk
 pip install twitter-text-python
-python && `nltk.download("stopwords")`
+python && `nltk.download("stopwords")`  
 
-##example code
+TODO: wrap all "analyzer" classes into one file so you don't have to import a whole bunch of different files
+## example code
 ```python
 from extractor import Extractor
 gg = Extractor(["#AltonSterling"], "OR", "2014-02-01", "2016-02-01")
@@ -47,4 +50,9 @@ import term_counter
 tc = term_counter.TermCounter("/home/dgaffney/hashtag_extractions/#AltonSterling_2015-08-09_2017-08-09_reduced", "/home/dgaffney/hashtag_results/#AltonSterling_2015-08-09_2017-08-09_reduced")
 tc.get_ranked_terms()
 tc.tweets_matching_tokens()
+
+import network_analyzer
+na = network_analyzer.NetworkAnalyzer("/home/dgaffney/hashtag_extractions/#AltonSterling_2015-08-09_2017-08-09_reduced", "/home/dgaffney/hashtag_results/#AltonSterling_2015-08-09_2017-08-09_reduced")
+na.get_edge_list()
+na.get_ranked_in_degree()
 ```
