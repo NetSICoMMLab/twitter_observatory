@@ -54,5 +54,6 @@ tc.tweets_matching_tokens()
 import network_analyzer
 na = network_analyzer.NetworkAnalyzer("/home/dgaffney/hashtag_extractions/#AltonSterling_2015-08-09_2017-08-09_reduced", "/home/dgaffney/hashtag_results/#AltonSterling_2015-08-09_2017-08-09_reduced")
 na.get_edge_list()
+na.get_network_size()
 na.get_ranked_in_degree()
 ```
