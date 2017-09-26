@@ -90,7 +90,10 @@ class TermCounter:
         except:
             print "File '"+output_dir+"' exists"
         for key in final_counts.keys():
-            self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
+            if key == "hashtags":
+                return [final_counts[key], output_dir+'/'+key+'.csv']
+            else:
+                self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
 
     def get_terms_from_file(self, filename, max_n):
         """
@@ -255,14 +258,15 @@ class TermCounter:
         Writes file (CSV file) of terms, counts, and rank
         """
         # Dict -> sorted list of (value, key) pairs in high->low order
-        values_keys = [(key2value, key) for key in key2value.keys()]
+        values_keys = [(key2value[key], key) for key in key2value.keys()]
         values_keys.sort(reverse = True)
         # Write ranks, keys, and values, to file
         #TODO: need to check file exists first I think?
         with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for k,(value,key) in enumerate(values_keys):
-                csvwriter.writerow([k,key,value])
+                print [k,key,value]
+                csvwriter.writerow([k,unicode(key).encode("utf-8"),value])
     
     def a_most_dirty_hand(self, csv_reader): 
         while True: 
