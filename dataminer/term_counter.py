@@ -172,7 +172,7 @@ class TermCounter:
                             tweet = json.loads(line)
                             text = unicode(tweet['text'], 'utf-8')
                         for term in top_terms:
-                            if str.lower(term) in str.lower(text):
+                            if str.lower(term.decode('utf-8')) in str.lower(text.decode('utf-8')):
                                 corpus.append(tweet)
             output_dir = self.working_dir+'/top_term_tweets'
             try:
