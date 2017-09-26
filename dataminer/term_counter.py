@@ -145,23 +145,23 @@ class TermCounter:
         if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set([el.replace(".csv", "") for el in os.listdir(self.working_dir+"/term_counts")])) == len(types):
             term_counts = Counter()
             for key in types:
-                with open(self.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
+                with open(tc.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
                     reader = csv.reader(f)
                     for row in reader:
-                        print row
                         if row[1] not in term_counts.keys():
                             term_counts[row[1]] = int(row[2])
                         else:
                             term_counts[row[1]] += int(row[2])
             top_terms = [el[0] for el in term_counts.most_common(top_count)]
-            tweet_files = os.listdir(self.tweet_dir)
+            tweet_files = os.listdir(tc.tweet_dir)
             # Search through tweet files
             corpus = []
             for filename in tweet_files:
+                print filename
                 with open(self.tweet_dir+'/'+filename, 'rb') as f:
                     # Open the file differently based on CSV or JSON
                     if self.reduced_data is True:
-                        tweet_file = csv.reader(f, delimiter='\t')
+                        tweet_file = self.a_most_dirty_hand(csv.reader(f, delimiter='\t'))
                     else:
                         tweet_file = f
                     # Read through each line of the file and update Counters
