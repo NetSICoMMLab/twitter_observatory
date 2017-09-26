@@ -145,7 +145,7 @@ class TermCounter:
         if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set([el.replace(".csv", "") for el in os.listdir(self.working_dir+"/term_counts")])) == len(types):
             term_counts = Counter()
             for key in types:
-                with open(tc.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
+                with open(self.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
                     reader = csv.reader(f)
                     for row in reader:
                         if row[1] not in term_counts.keys():
