@@ -148,10 +148,11 @@ class TermCounter:
                 with open(self.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
                     reader = csv.reader(f)
                     for row in reader:
-                        if row[0] not in term_counts.keys():
-                            term_counts[row[0]] = int(row[1])
+                        print row
+                        if row[1] not in term_counts.keys():
+                            term_counts[row[1]] = int(row[2])
                         else:
-                            term_counts[row[0]] += int(row[1])
+                            term_counts[row[1]] += int(row[2])
             top_terms = [el[0] for el in term_counts.most_common(top_count)]
             os.makedirs(output_dir)
             for key in final_counts.keys():
