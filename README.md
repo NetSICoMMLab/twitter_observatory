@@ -23,6 +23,7 @@ TODO:
 ## network.py
 TODO:
 - Return the full text of tweets by or mentioning the top n users in this distribution (can we use term_counter for this?)
+
 TODO: (extra)
 - Let user specify what interactions they want (retweet, quote retweet, mention, reply)
 - Rank users by any network measure
