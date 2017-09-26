@@ -49,7 +49,6 @@ class TermCounter:
 
     def __init__(self, tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
-        self.got_top_terms = False
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
@@ -157,7 +156,7 @@ class TermCounter:
             for key in final_counts.keys():
                 self.write_ranked_list(final_counts[key], output_dir+'/'+key+'.csv')
             tweet_files = os.listdir(self.tweet_dir)
-            # Get hashtags and unigram counts from each file
+            # Search through tweet files
             corpus = []
             for filename in tweet_files:
                 with open(self.tweet_dir+'/'+filename, 'rb') as f:
@@ -186,21 +185,7 @@ class TermCounter:
                 csvwriter.writerows(corpus)
         else:
             print "Cannot run this until you've run get_ranked_terms to generate term counts!!"
-    
-    # def get_full_text(self, search_term):
-    #     """
-    #     Gets the full text of all tweets containing a given search term
-    #     """
-    #     # List out tweet files
-    #     tweet_files = os.listdir(self.tweet_dir)
-    #     for filename in tweet_files:
-    #         # parts of get_terms_from_file() should be wrapped into a function for
-    #         # use with this function and get_full_text_from_file()
-    
-    # def get_full_text_from_file(self, search_term):
-    #     """
-    #     Helper function to get_full_text()
-    #     """
+            sys.exit()
 
     # --------------------------------------------------------------------------
     # ---------------------------- Helper functions ----------------------------
@@ -239,7 +224,7 @@ class TermCounter:
 
     def parse(self, text):
         return ttp.Parser().parse(text)
-    
+
     def hashtags(self, text):
         return self.parse(text).tags
 
@@ -255,21 +240,20 @@ class TermCounter:
         Writes file (CSV file) of terms, counts, and rank
         """
         # Dict -> sorted list of (value, key) pairs in high->low order
-        values_keys = [(key2value, key) for key in key2value.keys()]
+        values_keys = [(key2value[key], key) for key in key2value]
         values_keys.sort(reverse = True)
         # Write ranks, keys, and values, to file
-        #TODO: need to check file exists first I think?
         with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for k,(value,key) in enumerate(values_keys):
                 csvwriter.writerow([k,key,value])
-    
-    def a_most_dirty_hand(self, csv_reader): 
-        while True: 
-            try: 
-                yield next(csv_reader) 
-            except csv.Error: 
+
+    def a_most_dirty_hand(self, csv_reader):
+        while True:
+            try:
+                yield next(csv_reader)
+            except csv.Error:
                 # error handling what you want.
                 pass
-            continue 
+            continue
         return
