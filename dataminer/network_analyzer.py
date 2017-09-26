@@ -85,6 +85,7 @@ class NetworkAnalyzer:
             else:
                 tweet_file = f
             # Read through each line of the file and update Counters
+            null_rows = 0
             for tweet in tweet_file:
                 try:
                     if self.reduced_data is True:
