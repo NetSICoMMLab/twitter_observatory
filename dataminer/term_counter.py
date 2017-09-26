@@ -8,6 +8,7 @@ Devin Gaffney & Ryan J. Gallagher
 Network Science Institute, Northeastern University, 2017
 """
 import os
+import sys
 import csv
 import json
 from datetime import datetime
@@ -141,7 +142,7 @@ class TermCounter:
         return {'terms': term2count, 'hashtags': hashtag2count, 'mentions': mention2count, 'urls': url2count}
 
     def tweets_matching_tokens(self, top_count=20, types=["hashtags"]):
-        if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set(os.listdir(self.working_dir))) == len(types):
+        if "term_counts" in os.listdir(self.working_dir) and len(set(types)&set([el.replace(".csv", "") for el in os.listdir(self.working_dir+"/term_counts")])) == len(types):
             term_counts = Counter()
             for key in types:
                 with open(self.working_dir+'/term_counts/'+key+'.csv', 'rb') as f:
