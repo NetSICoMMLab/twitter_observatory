@@ -162,6 +162,7 @@ class NetworkAnalyzer:
         with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for (weight,edge) in weight_edges:
+                print [edge[0],edge[1],weight]
                 csvwriter.writerow([edge[0],edge[1],weight])
 
     def a_most_dirty_hand(self, csv_reader):
