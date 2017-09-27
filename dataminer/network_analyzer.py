@@ -75,7 +75,8 @@ class NetworkAnalyzer:
             os.makedirs(output_dir)
         except:
             print "File '"+output_dir+"' exists"
-        self.write_edge_list(self.edge2weight, output_dir+'/edge-list.csv')
+        return [self.edge2weight, output_dir+'/edge-list.csv']
+        #self.write_edge_list(self.edge2weight, output_dir+'/edge-list.csv')
 
     def get_edges_from_file(self, filename):
         edge2weight = Counter()
