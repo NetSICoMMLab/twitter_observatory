@@ -117,7 +117,6 @@ class NetworkAnalyzer:
         self.n_nodes = len(nodes)
 
     def get_ranked_in_degree(self):
-        self.node2in_deg = Counter()
         if len(self.edge2weight.keys()) == 0:
             print 'Need an edge list to get the ranked in-degrees'
             sys.exit()
@@ -131,7 +130,7 @@ class NetworkAnalyzer:
             os.makedirs(output_dir)
         except:
             print "File '"+output_dir+"' exists"
-        self.write_ranked_list(self.node2in_degree, output_dir+'/ranked-indegree.csv')
+        self.write_ranked_list(self.node2in_deg, output_dir+'/ranked-indegree.csv')
 
 
     # --------------------------------------------------------------------------
