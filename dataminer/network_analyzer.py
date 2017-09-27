@@ -117,6 +117,7 @@ class NetworkAnalyzer:
         self.n_nodes = len(nodes)
 
     def get_ranked_in_degree(self):
+        self.node2in_deg = Counter()
         if len(self.edge2weight.keys()) == 0:
             print 'Need an edge list to get the ranked in-degrees'
             sys.exit()
@@ -162,7 +163,6 @@ class NetworkAnalyzer:
         with open(filename, 'a') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for (weight,edge) in weight_edges:
-                print [edge[0],edge[1],weight]
                 csvwriter.writerow([edge[0],edge[1],weight])
 
     def a_most_dirty_hand(self, csv_reader):
