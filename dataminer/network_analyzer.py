@@ -100,7 +100,7 @@ class NetworkAnalyzer:
                 mentions = term_counter.TermCounter("", "").mentions(text)
                 # Make edges of user with all mentions
                 for mention in mentions:
-                    edge2weight.update((user, mention))
+                    edge2weight.update([(user, mention)])
                 # except:
                 #     print "Null row."
                 #     null_rows += 1
