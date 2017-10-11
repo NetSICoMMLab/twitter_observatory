@@ -80,7 +80,7 @@ class NetworkAnalyzer:
 
     def basic_stats(self):
         output_dir = self.working_dir+'/network_stats'
-        G=nx.read_weighted_edgelist(output_dir+'/edge-list.csv')
+        G=nx.read_weighted_edgelist(output_dir+'/edge-list.csv', delimiter=",")
         graphs = list(nx.connected_component_subgraphs(G))
         lcc = sorted(graphs, key=lambda graph: len(graph.nodes()), reverse=True)[0]
         try:
