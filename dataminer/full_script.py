@@ -12,6 +12,12 @@ def run(filename):
     na.graph_from_edge_list()
     na.get_ranked_in_degree()
 
+def run_short(filename):
+    tc = term_counter.TermCounter("/home/dgaffney/hashtag_extractions/"+filename, "/home/dgaffney/hashtag_results/"+filename)
+    print tc.get_counts()
+    na = network_analyzer.NetworkAnalyzer("/home/dgaffney/hashtag_extractions/"+filename, "/home/dgaffney/hashtag_results/"+filename)
+    na.basic_stats()
+
 
 filename = "#AllMenCan_2014-02-01_2016-02-01_reduced"
 filename = "#AltonSterling_2015-08-09_2017-08-09_reduced"

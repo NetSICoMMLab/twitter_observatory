@@ -78,7 +78,7 @@ class NetworkAnalyzer:
             print "File '"+output_dir+"' exists"
         self.write_edge_list(self.edge2weight, output_dir+'/edge-list.csv')
 
-    def graph_from_edge_list(self):
+    def basic_stats(self):
         output_dir = self.working_dir+'/network_stats'
         G=nx.read_weighted_edgelist(output_dir+'/edge-list.csv')
         graphs = list(nx.connected_component_subgraphs(G))
