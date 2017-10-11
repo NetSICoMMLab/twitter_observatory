@@ -16,7 +16,7 @@ def run_short(filename):
     tc = term_counter.TermCounter("/home/dgaffney/hashtag_extractions/"+filename, "/home/dgaffney/hashtag_results/"+filename)
     print tc.get_counts()
     na = network_analyzer.NetworkAnalyzer("/home/dgaffney/hashtag_extractions/"+filename, "/home/dgaffney/hashtag_results/"+filename)
-    na.basic_stats()
+    print na.basic_stats()
 
 
 filename = "#AllMenCan_2014-02-01_2016-02-01_reduced"
