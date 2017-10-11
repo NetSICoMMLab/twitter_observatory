@@ -59,6 +59,12 @@ class TermCounter:
         else:
             self.reduced_data = False
 
+    def get_counts(self):
+        output_dir = self.working_dir+'/term_counts'
+        counts = {}
+        for key in ["terms", "hashtags", "mentions", "urls"]:
+            counts[key] = [r for r in self.a_most_dirty_hand(csv.reader(output_dir+"/"+key+".csv", delimiter='\t'))]
+        return counts
 
     def get_ranked_terms(self, max_n=1):
         """

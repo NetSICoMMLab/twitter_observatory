@@ -77,6 +77,17 @@ class NetworkAnalyzer:
             print "File '"+output_dir+"' exists"
         self.write_edge_list(self.edge2weight, output_dir+'/edge-list.csv')
 
+    def graph_from_edge_list(self):
+        output_dir = self.working_dir+'/network_stats'
+        G=nx.read_weighted_edgelist(output_dir+'/edge-list.csv')
+        graphs = list(nx.connected_component_subgraphs(G))
+        lcc = sorted(graphs, key=lambda graph: len(graph.nodes()), reverse=True)[0]
+        try:
+            diameter = nx.diameter(G)
+        except:
+            diameter = "NA"
+        return {'node_count': len(G.nodes()), 'edge_count': len(G.edges()), 'component_count': len(graphs), 'lcc_node_count': len(lcc.nodes()), 'lcc_edge_count': len(lcc.edges()), 'diameter': diameter, 'lcc_diameter': nx.diameter(lcc)}
+
     def get_edges_from_file(self, filename):
         edge2weight = Counter()
         with open(self.tweet_dir+'/'+filename, 'rb') as f:
@@ -145,7 +156,7 @@ class NetworkAnalyzer:
         values_keys = [(key2value[key], key) for key in key2value]
         values_keys.sort(reverse = True)
         # Write ranks, keys, and values, to file
-        with open(filename, 'a') as f:
+        with open(filename, 'w') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for k,(value,key) in enumerate(values_keys):
                 csvwriter.writerow([k,key,value])
@@ -159,7 +170,7 @@ class NetworkAnalyzer:
         weight_edges = [(edge2weight[edge], edge) for edge in edge2weight]
         weight_edges.sort(reverse = True)
         # Write ranks, keys, and values, to file
-        with open(filename, 'a') as f:
+        with open(filename, 'w') as f:
             csvwriter = csv.writer(f, delimiter=',')
             for (weight,edge) in weight_edges:
                 csvwriter.writerow([edge[0],edge[1],weight])
