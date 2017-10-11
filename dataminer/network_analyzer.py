@@ -13,6 +13,7 @@ import term_counter
 from ttp import ttp
 #import networkx as nx
 from collections import Counter
+import networkx as nx
 
 class NetworkAnalyzer:
     """
