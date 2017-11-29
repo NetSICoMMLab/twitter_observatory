@@ -10,6 +10,7 @@ Network Science Institute, Northeastern University, 2017
 import os
 import csv
 import json
+from collections import Counter
 
 class Time_Analyzer:
     """
@@ -46,3 +47,25 @@ class Time_Analyzer:
             self.reduced_data = True
         else:
             self.reduced_data = False
+
+    def get_timeline(self):
+        # List out tweet files
+        tweet_files = os.listdir(self.tweet_dir)
+        # Get edges from each tweet file
+        timeline = Counter()
+        for filename in tweet_files:
+            with open(self.tweet_dir+'/'+filename, 'rb') as f:
+                # Open the file differently based on CSV or JSON
+                if self.reduced_data is True:
+                    tweet_file = self.a_most_dirty_hand(csv.reader(f, delimiter='\t'))
+                else:
+                    tweet_file = f
+                # Read through each line of the file and update Counters
+                for tweet in tweet_file:
+                    try:
+                        if self.reduced_data is True:
+                            print tweet
+                            text = unicode(tweet[9], 'utf-8')
+                        else:
+                            tweet = json.loads(line)
+                            text = unicode(tweet['text'], 'utf-8')
