@@ -35,7 +35,7 @@ class TimeAnalyzer:
         True if working with tweets from summarized CSV file. False if working
         with the full JSON data.
     """
-    def __init__(tweet_dir, working_dir=None):
+    def __init__(self, tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
         self.got_top_terms = False
         if working_dir is None:
