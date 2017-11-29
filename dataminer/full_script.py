@@ -46,3 +46,4 @@ filename = "#YouOKSis_2014-02-01_2016-02-01_reduced"
 
 import time_analyzer
 ta = time_analyzer.TimeAnalyzer("/home/dgaffney/hashtag_extractions/#YouOKSis_2014-02-01_2016-02-01_reduced", "/home/dgaffney/hashtag_results/#YouOKSis_2014-02-01_2016-02-01_reduced")
+ta.get_timeline()

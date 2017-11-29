@@ -72,3 +72,13 @@ class TimeAnalyzer:
                     except:
                         print "Null row."
                         null_rows += 1
+
+    def a_most_dirty_hand(self, csv_reader):
+        while True:
+            try:
+                yield next(csv_reader)
+            except csv.Error:
+                # error handling what you want.
+                pass
+            continue
+        return
