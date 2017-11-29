@@ -66,7 +66,6 @@ class TimeAnalyzer:
                 for tweet in tweet_file:
                     try:
                         if self.reduced_data is True:
-                            print tweet
                             timeline.update([parser.parse(tweet[2]).strftime("%Y-%m-%d")])
                         else:
                             tweet = json.loads(line)
@@ -95,9 +94,9 @@ class TimeAnalyzer:
             spiked.append([time_str, this_count])
             time_cursor = time_cursor+datetime.timedelta(days=1)
         try:
-            os.makedirs(output_dir)
+            os.makedirs(self.working_dir+'/timelines')
         except:
-            print "File '"+output_dir+"' exists"
+            print "File '"+self.working_dir+'/timelines'+"' exists"
         spiked_filename = self.working_dir+'/timelines'+"/spiked.csv"
         cumulative_filename = self.working_dir+'/timelines'+"/cumulative.csv"
         with open(spiked_filename, 'w') as f:
