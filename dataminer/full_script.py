@@ -44,4 +44,6 @@ filename = "#WhyIStayed_2014-02-01_2016-02-01_reduced"
 filename = "#YesAllWomen_2014-02-01_2016-02-01_reduced"
 filename = "#YouOKSis_2014-02-01_2016-02-01_reduced"
 
-tc = term_counter.Time_Analyzer("/home/dgaffney/hashtag_extractions/#YouOKSis_2014-02-01_2016-02-01_reduced", "/home/dgaffney/hashtag_results/#YouOKSis_2014-02-01_2016-02-01_reduced")
+import time_analyzer
+
+ta = time_analyzer.TimeAnalyzer("/home/dgaffney/hashtag_extractions/#YouOKSis_2014-02-01_2016-02-01_reduced", "/home/dgaffney/hashtag_results/#YouOKSis_2014-02-01_2016-02-01_reduced")

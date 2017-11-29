@@ -12,7 +12,7 @@ import csv
 import json
 from collections import Counter
 
-class Time_Analyzer:
+class TimeAnalyzer:
     """
     Count the number of tweets for time series at various temporal scales
 
@@ -35,7 +35,6 @@ class Time_Analyzer:
         True if working with tweets from summarized CSV file. False if working
         with the full JSON data.
     """
-    
     def __init__(tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
         self.got_top_terms = False
@@ -51,6 +50,7 @@ class Time_Analyzer:
     def get_timeline(self):
         # List out tweet files
         tweet_files = os.listdir(self.tweet_dir)
+        null_rows = 0
         # Get edges from each tweet file
         timeline = Counter()
         for filename in tweet_files:
@@ -69,3 +69,6 @@ class Time_Analyzer:
                         else:
                             tweet = json.loads(line)
                             text = unicode(tweet['text'], 'utf-8')
+                    except:
+                        print "Null row."
+                        null_rows += 1
