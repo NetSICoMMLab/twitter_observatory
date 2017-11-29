@@ -41,7 +41,7 @@ class TimeAnalyzer:
         if working_dir is None:
             self.working_dir = os.getcwd()
         else:
-            self.working_dir = working_Dir
+            self.working_dir = working_dir
         if 'reduced' in self.tweet_dir:
             self.reduced_data = True
         else:
