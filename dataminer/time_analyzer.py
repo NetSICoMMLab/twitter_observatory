@@ -69,5 +69,3 @@ class Time_Analyzer:
                         else:
                             tweet = json.loads(line)
                             text = unicode(tweet['text'], 'utf-8')
-    
-
