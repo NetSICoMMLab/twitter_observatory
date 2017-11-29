@@ -11,6 +11,7 @@ import os
 import csv
 import json
 from collections import Counter
+from dateutil import parser
 
 class TimeAnalyzer:
     """
@@ -65,13 +66,14 @@ class TimeAnalyzer:
                     try:
                         if self.reduced_data is True:
                             print tweet
-                            text = unicode(tweet[9], 'utf-8')
+                            timeline.update([parser.parse(tweet[2]).strftime("%Y-%m-%d")])
                         else:
                             tweet = json.loads(line)
-                            text = unicode(tweet['text'], 'utf-8')
+                            timeline.update([parser.parse(tweet["created_at"]).strftime("%Y-%m-%d")])
                     except:
                         print "Null row."
                         null_rows += 1
+        return timeline
 
     def a_most_dirty_hand(self, csv_reader):
         while True:
