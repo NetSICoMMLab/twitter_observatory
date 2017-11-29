@@ -1,4 +1,4 @@
-"""Term Analyzer (time_anlayzer.py)
+"""Time Analyzer (time_anlayzer.py)
 Takes a directory of tweets and returns count time series of those tweets at
 various temporal scales
 
@@ -35,7 +35,7 @@ class Time_Analyzer:
         True if working with tweets from summarized CSV file. False if working
         with the full JSON data.
     """
-
+    
     def __init__(tweet_dir, working_dir=None):
         self.tweet_dir = tweet_dir
         self.got_top_terms = False
@@ -47,7 +47,7 @@ class Time_Analyzer:
             self.reduced_data = True
         else:
             self.reduced_data = False
-
+    
     def get_timeline(self):
         # List out tweet files
         tweet_files = os.listdir(self.tweet_dir)
@@ -69,3 +69,5 @@ class Time_Analyzer:
                         else:
                             tweet = json.loads(line)
                             text = unicode(tweet['text'], 'utf-8')
+    
+

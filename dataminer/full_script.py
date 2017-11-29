@@ -1,5 +1,6 @@
 import network_analyzer
 import term_counter
+import time_analyzer
 filename = "#AltonSterling_2015-08-09_2017-08-09_reduced"
 def run(filename):
     tc = term_counter.TermCounter("/home/dgaffney/hashtag_extractions/"+filename, "/home/dgaffney/hashtag_results/"+filename)
@@ -42,3 +43,5 @@ filename = "#WalterScott_2015-08-09_2017-08-09_reduced"
 filename = "#WhyIStayed_2014-02-01_2016-02-01_reduced"
 filename = "#YesAllWomen_2014-02-01_2016-02-01_reduced"
 filename = "#YouOKSis_2014-02-01_2016-02-01_reduced"
+
+tc = term_counter.Time_Analyzer("/home/dgaffney/hashtag_extractions/#YouOKSis_2014-02-01_2016-02-01_reduced", "/home/dgaffney/hashtag_results/#YouOKSis_2014-02-01_2016-02-01_reduced")
