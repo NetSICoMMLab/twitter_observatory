@@ -12,6 +12,7 @@ import csv
 import json
 from collections import Counter
 from dateutil import parser
+import datetime
 
 class TimeAnalyzer:
     """
@@ -75,6 +76,38 @@ class TimeAnalyzer:
                         null_rows += 1
         return timeline
 
+    def write_timelines(self):
+        timeline = self.get_timeline()
+        earliest = sorted(timeline.keys())[0]
+        latest = sorted(timeline.keys())[-1]
+        time_cursor = parser.parse(earliest)
+        end_time = parser.parse(latest)
+        cumulative = []
+        spiked = []
+        cumulative_count = 0
+        while time_cursor <= end_time:
+            time_str = time_cursor.strftime("%Y-%m-%d")
+            this_count = 0
+            if time_str in timeline.keys():
+                cumulative_count += timeline[time_str]
+                this_count = timeline[time_str]
+            cumulative.append([time_str, cumulative_count])
+            spiked.append([time_str, this_count])
+            time_cursor = time_cursor+datetime.timedelta(days=1)
+        try:
+            os.makedirs(output_dir)
+        except:
+            print "File '"+output_dir+"' exists"
+        spiked_filename = self.working_dir+'/timelines'+"/spiked.csv"
+        cumulative_filename = self.working_dir+'/timelines'+"/cumulative.csv"
+        with open(spiked_filename, 'w') as f:
+            csvwriter = csv.writer(f, delimiter=',')
+            csvwriter.writerows(spiked)
+        with open(cumulative_filename, 'w') as f:
+            csvwriter = csv.writer(f, delimiter=',')
+            csvwriter.writerows(cumulative)
+
+        
     def a_most_dirty_hand(self, csv_reader):
         while True:
             try:
